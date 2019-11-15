@@ -66,7 +66,7 @@ public class RabbitBlockChainEventBroadcaster implements BlockchainEventBroadcas
     }
 
     @Override
-    public void broadcastTransaction(TransactionDetails transactionDetails) {
+    public void broadcastTransaction(TransactionDetails transactionDetails, boolean bool) {
         final EventeumMessage<TransactionDetails> message = createTransactionEventMessage(transactionDetails);
         rabbitTemplate.convertAndSend(this.rabbitSettings.getExchange(),
                 String.format("%s.%s", this.rabbitSettings.getRoutingKeyPrefix(), transactionDetails.getHash()),

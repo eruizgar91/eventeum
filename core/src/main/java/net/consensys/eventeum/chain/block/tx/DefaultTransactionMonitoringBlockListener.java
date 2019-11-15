@@ -160,12 +160,16 @@ public class DefaultTransactionMonitoringBlockListener implements TransactionMon
     private void broadcastIfMatched(Transaction tx, String nodeName) {
         if (criteria.containsKey(nodeName)) {
             broadcastIfMatched(tx, nodeName, criteria.get(nodeName));
+        } else {
+            final TransactionDetails txDetails = transactionDetailsFactory.createTransactionDetails(
+                    tx, TransactionStatus.CONFIRMED, nodeName);
+            broadcastTransaction(txDetails, null);
         }
     }
 
     private Optional<Block> getBlock(String blockHash, String nodeName) {
         return getRetryTemplate().execute((context) -> {
-            final Optional<Block> block =  getBlockchainService(nodeName).getBlock(blockHash, true);
+            final Optional<Block> block = getBlockchainService(nodeName).getBlock(blockHash, true);
 
             if (!block.isPresent()) {
                 throw new BlockchainException("Block not found");
@@ -209,8 +213,12 @@ public class DefaultTransactionMonitoringBlockListener implements TransactionMon
     }
 
     private void broadcastTransaction(TransactionDetails txDetails, TransactionMatchingCriteria matchingCriteria) {
-        if (matchingCriteria.getStatuses().contains(txDetails.getStatus())) {
-            broadcaster.broadcastTransaction(txDetails);
+        if (matchingCriteria != null && matchingCriteria.getStatuses().contains(txDetails.getStatus())) {
+            broadcaster.broadcastTransaction(txDetails, false);
+            broadcaster.broadcastTransaction(txDetails, true);
+        }
+        else {
+            broadcaster.broadcastTransaction(txDetails, false);
         }
     }
 

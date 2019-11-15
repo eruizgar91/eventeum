@@ -59,10 +59,16 @@ public abstract class AbstractBlockSubscriptionStrategy<T> implements BlockSubsc
         return blockSubscription != null && !blockSubscription.isUnsubscribed();
     }
 
-    protected void triggerListeners(T blockObject) {
+    protected void triggerListeners(T blockObject){
         lock.lock();
         try {
-            blockListeners.forEach(listener -> triggerListener(listener, convertToBlockDetails(blockObject)));
+            blockListeners.forEach(listener -> {
+                try {
+                    triggerListener(listener, convertToBlockDetails(blockObject));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            });
         } finally {
             lock.unlock();
         }
@@ -80,6 +86,6 @@ public abstract class AbstractBlockSubscriptionStrategy<T> implements BlockSubsc
         return eventStoreService.getLatestBlock(nodeName);
     }
 
-    abstract BlockDetails convertToBlockDetails(T blockObject);
+    abstract BlockDetails convertToBlockDetails(T blockObject) throws Exception;
 
 }

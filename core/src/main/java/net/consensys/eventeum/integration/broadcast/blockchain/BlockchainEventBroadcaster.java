@@ -27,5 +27,5 @@ public interface BlockchainEventBroadcaster {
      * Broadcasts details of a monitored transaction that has been mined.
      * @param transactionDetails
      */
-    void broadcastTransaction(TransactionDetails transactionDetails);
+    void broadcastTransaction(TransactionDetails transactionDetails, boolean bool);
 }

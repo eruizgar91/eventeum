@@ -55,7 +55,7 @@ public class HttpBlockchainEventBroadcaster implements BlockchainEventBroadcaste
     }
 
     @Override
-    public void broadcastTransaction(TransactionDetails transactionDetails) {
+    public void broadcastTransaction(TransactionDetails transactionDetails, boolean bool) {
 
     }
 

@@ -18,4 +18,6 @@ public class BlockDetails {
     private BigInteger timestamp;
 
     private String nodeName;
+
+    private String networkId;
 }

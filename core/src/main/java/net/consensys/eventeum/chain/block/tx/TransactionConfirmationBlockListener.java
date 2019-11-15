@@ -118,7 +118,7 @@ public class TransactionConfirmationBlockListener extends SelfUnregisteringBlock
     private void broadcastEvent(TransactionDetails transactionDetails) {
         if (!isInvalidated.get() && statusesToFilter.contains(transactionDetails.getStatus())) {
             LOG.debug(String.format("Sending confirmed event for transaction: %s", transactionDetails.getHash()));
-            eventBroadcaster.broadcastTransaction(transactionDetails);
+            eventBroadcaster.broadcastTransaction(transactionDetails, false);
         }
     }
 

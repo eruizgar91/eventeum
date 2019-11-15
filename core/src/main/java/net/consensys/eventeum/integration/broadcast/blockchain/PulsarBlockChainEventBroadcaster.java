@@ -76,7 +76,7 @@ import net.consensys.eventeum.integration.broadcast.BroadcastException;
 	}
 
     @Override
-    public void broadcastTransaction(TransactionDetails transactionDetails) {
+    public void broadcastTransaction(TransactionDetails transactionDetails, boolean bool) {
         send(transactionDetails, transactionEventProducer);
     }
 

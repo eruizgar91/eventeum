@@ -21,7 +21,7 @@ import net.consensys.eventeum.dto.transaction.TransactionDetails;
     }
 
     @Override
-    public void broadcastTransaction(TransactionDetails transactionDetails) {
+    public void broadcastTransaction(TransactionDetails transactionDetails, boolean bool) {
         listener.onTransactionEvent(transactionDetails);
     }
 

@@ -1,19 +1,14 @@
 package net.consensys.eventeum.chain.service.strategy;
 
 import net.consensys.eventeum.dto.block.BlockDetails;
-import net.consensys.eventeum.integration.eventstore.EventStore;
 import net.consensys.eventeum.model.LatestBlock;
-import net.consensys.eventeum.service.AsyncTaskService;
 import net.consensys.eventeum.service.EventStoreService;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameter;
 import org.web3j.protocol.core.methods.response.EthBlock;
 import rx.Subscription;
 
-import java.math.BigInteger;
 import java.util.Optional;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 public class PollingBlockSubscriptionStrategy extends AbstractBlockSubscriptionStrategy<EthBlock> {
 
@@ -30,7 +25,9 @@ public class PollingBlockSubscriptionStrategy extends AbstractBlockSubscriptionS
             final DefaultBlockParameter blockParam = DefaultBlockParameter.valueOf(latestBlock.get().getNumber());
 
             blockSubscription = web3j.catchUpToLatestAndSubscribeToNewBlocksObservable(blockParam, false)
-                    .subscribe(block -> { triggerListeners(block); });
+                    .subscribe(block -> {
+                        triggerListeners(block);
+                    });
 
         } else {
             blockSubscription = web3j.blockObservable(false).subscribe(block -> {
@@ -42,7 +39,7 @@ public class PollingBlockSubscriptionStrategy extends AbstractBlockSubscriptionS
     }
 
     @Override
-    BlockDetails convertToBlockDetails(EthBlock blockObject) {
+    BlockDetails convertToBlockDetails(EthBlock blockObject) throws Exception {
         final EthBlock.Block block = blockObject.getBlock();
         final BlockDetails blockDetails = new BlockDetails();
 
@@ -50,6 +47,7 @@ public class PollingBlockSubscriptionStrategy extends AbstractBlockSubscriptionS
         blockDetails.setHash(block.getHash());
         blockDetails.setTimestamp(block.getTimestamp());
         blockDetails.setNodeName(nodeName);
+        blockDetails.setNetworkId(web3j.netVersion().send().getResult());
 
         return blockDetails;
     }

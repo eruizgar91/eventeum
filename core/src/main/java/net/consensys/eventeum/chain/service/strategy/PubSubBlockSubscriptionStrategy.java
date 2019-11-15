@@ -65,12 +65,14 @@ public class PubSubBlockSubscriptionStrategy extends AbstractBlockSubscriptionSt
     }
 
     @Override
-    BlockDetails convertToBlockDetails(NewHead blockObject) {
+    BlockDetails convertToBlockDetails(NewHead blockObject) throws Exception{
         final BlockDetails blockDetails = new BlockDetails();
         blockDetails.setHash(blockObject.getHash());
         blockDetails.setNumber(Numeric.decodeQuantity(blockObject.getNumber()));
         blockDetails.setTimestamp(Numeric.decodeQuantity(blockObject.getTimestamp()));
         blockDetails.setNodeName(nodeName);
+        blockDetails.setNetworkId(web3j.netVersion().send().getResult());
+
 
         return blockDetails;
     }

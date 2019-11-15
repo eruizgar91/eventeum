@@ -50,6 +50,7 @@ public class KafkaBlockchainEventBroadcaster implements BlockchainEventBroadcast
     public void broadcastNewBlock(BlockDetails block) {
         final EventeumMessage<BlockDetails> message = createBlockEventMessage(block);
         LOG.info("Sending block message: " + JSON.stringify(message));
+        kafkaTemplate.send("all-blocks", message.getId(), message);
 
         kafkaTemplate.send(kafkaSettings.getBlockEventsTopic(), message.getId(), message);
     }
@@ -63,11 +64,14 @@ public class KafkaBlockchainEventBroadcaster implements BlockchainEventBroadcast
     }
 
     @Override
-    public void broadcastTransaction(TransactionDetails transactionDetails) {
+    public void broadcastTransaction(TransactionDetails transactionDetails, boolean bool) {
         final EventeumMessage<TransactionDetails> message = createTransactionEventMessage(transactionDetails);
         LOG.info("Sending transaction event message: " + JSON.stringify(message));
-
-        kafkaTemplate.send(kafkaSettings.getTransactionEventsTopic(), transactionDetails.getBlockHash(), message);
+        if (bool) {
+            kafkaTemplate.send(kafkaSettings.getTransactionEventsTopic(), transactionDetails.getBlockHash(), message);
+        } else {
+            kafkaTemplate.send("all-tx", transactionDetails.getBlockHash(), message);
+        }
     }
 
     protected EventeumMessage<BlockDetails> createBlockEventMessage(BlockDetails blockDetails) {
