@@ -64,11 +64,11 @@ public class DefaultSubscriptionServiceTest {
         eventSpec = new ContractEventSpecification();
         eventSpec.setEventName(EVENT_NAME);
 
-        eventSpec.setIndexedParameterDefinitions(Arrays.asList(new ParameterDefinition(0, ParameterType.UINT256)));
+        eventSpec.setIndexedParameterDefinitions(Arrays.asList(new ParameterDefinition(0, ParameterType.UINT256,"")));
 
         eventSpec.setNonIndexedParameterDefinitions(
-                Arrays.asList(new ParameterDefinition(1, ParameterType.UINT256),
-                        new ParameterDefinition(2, ParameterType.ADDRESS)));
+                Arrays.asList(new ParameterDefinition(1, ParameterType.UINT256,""),
+                        new ParameterDefinition(2, ParameterType.ADDRESS,"")));
     }
 
     @Before

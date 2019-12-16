@@ -409,13 +409,13 @@ public class BaseIntegrationTest {
 
         final ContractEventSpecification eventSpec = new ContractEventSpecification();
         eventSpec.setIndexedParameterDefinitions(
-                Arrays.asList(new ParameterDefinition(0, ParameterType.BYTES32),
-                              new ParameterDefinition(1, ParameterType.ADDRESS)));
+                Arrays.asList(new ParameterDefinition(0, ParameterType.BYTES32, ""),
+                              new ParameterDefinition(1, ParameterType.ADDRESS, "")));
 
         eventSpec.setNonIndexedParameterDefinitions(
-                Arrays.asList(new ParameterDefinition(2, ParameterType.UINT256),
-                              new ParameterDefinition(3, ParameterType.STRING),
-                              new ParameterDefinition(4, ParameterType.UINT8)));
+                Arrays.asList(new ParameterDefinition(2, ParameterType.UINT256, ""),
+                              new ParameterDefinition(3, ParameterType.STRING, ""),
+                              new ParameterDefinition(4, ParameterType.UINT8, "")));
 
         eventSpec.setEventName(DUMMY_EVENT_NAME);
 
@@ -430,13 +430,13 @@ public class BaseIntegrationTest {
 
         final ContractEventSpecification eventSpec = new ContractEventSpecification();
         eventSpec.setIndexedParameterDefinitions(
-                Arrays.asList(new ParameterDefinition(0, ParameterType.BYTES32),
-                              new ParameterDefinition(2, ParameterType.ADDRESS)));
+                Arrays.asList(new ParameterDefinition(0, ParameterType.BYTES32, ""),
+                              new ParameterDefinition(2, ParameterType.ADDRESS, "")));
 
         eventSpec.setNonIndexedParameterDefinitions(
-                Arrays.asList(new ParameterDefinition(1, ParameterType.UINT256),
-                              new ParameterDefinition(3, ParameterType.STRING),
-                              new ParameterDefinition(4, ParameterType.UINT8)));
+                Arrays.asList(new ParameterDefinition(1, ParameterType.UINT256, ""),
+                              new ParameterDefinition(3, ParameterType.STRING, ""),
+                              new ParameterDefinition(4, ParameterType.UINT8, "")));
 
         eventSpec.setEventName(DUMMY_EVENT_NOT_ORDERED_NAME);
 

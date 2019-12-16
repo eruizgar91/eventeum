@@ -21,6 +21,8 @@ public class ParameterDefinition implements Comparable<ParameterDefinition>, Ser
     @Enumerated(EnumType.ORDINAL)
     private ParameterType type;
 
+    private String name;
+
     @Override
     public int compareTo(ParameterDefinition o) {
         return this.position.compareTo(o.getPosition());

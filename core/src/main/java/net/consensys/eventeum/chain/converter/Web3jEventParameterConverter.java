@@ -27,20 +27,20 @@ public class Web3jEventParameterConverter implements EventParameterConverter<Typ
 
     public Web3jEventParameterConverter(EventeumSettings settings) {
         typeConverters.put("address",
-                (type) -> new StringParameter(type.getTypeAsString(), Keys.toChecksumAddress(type.toString())));
+                (type) -> new StringParameter(type.getTypeAsString(), Keys.toChecksumAddress(type.toString()),""));
         typeConverters.put("uint8",
-                (type) -> new NumberParameter(type.getTypeAsString(), (BigInteger) type.getValue()));
+                (type) -> new NumberParameter(type.getTypeAsString(), (BigInteger) type.getValue(),""));
         typeConverters.put("uint256",
-                (type) -> new NumberParameter(type.getTypeAsString(), (BigInteger) type.getValue()));
+                (type) -> new NumberParameter(type.getTypeAsString(), (BigInteger) type.getValue(),""));
         typeConverters.put("int256",
-                (type) -> new NumberParameter(type.getTypeAsString(), (BigInteger) type.getValue()));
+                (type) -> new NumberParameter(type.getTypeAsString(), (BigInteger) type.getValue(),""));
         typeConverters.put("bytes16",
                 (type) -> convertBytesType(type));
         typeConverters.put("bytes32",
                 (type) -> convertBytesType(type));
         typeConverters.put("string",
                 (type) -> new StringParameter(type.getTypeAsString(),
-                        trim((String)type.getValue())));
+                        trim((String)type.getValue()),""));
 
         this.settings = settings;
     }
@@ -59,11 +59,11 @@ public class Web3jEventParameterConverter implements EventParameterConverter<Typ
     private EventParameter convertBytesType(Type bytesType) {
         if (settings.isBytesToAscii()) {
             return new StringParameter(
-                    bytesType.getTypeAsString(), trim(new String((byte[]) bytesType.getValue())));
+                    bytesType.getTypeAsString(), trim(new String((byte[]) bytesType.getValue())),"");
         }
 
         return new StringParameter(
-                bytesType.getTypeAsString(), trim(Numeric.toHexString((byte[]) bytesType.getValue())));
+                bytesType.getTypeAsString(), trim(Numeric.toHexString((byte[]) bytesType.getValue())),"");
     }
 
     private String trim(String toTrim) {

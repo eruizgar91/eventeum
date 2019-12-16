@@ -1,15 +1,16 @@
 package net.consensys.eventeum.chain.factory;
 
-import java.util.Collections;
 import net.consensys.eventeum.chain.config.EventConfirmationConfig;
-import net.consensys.eventeum.chain.util.Web3jUtil;
 import net.consensys.eventeum.chain.converter.EventParameterConverter;
+import net.consensys.eventeum.chain.util.Web3jUtil;
 import net.consensys.eventeum.dto.event.ContractEventDetails;
 import net.consensys.eventeum.dto.event.ContractEventStatus;
 import net.consensys.eventeum.dto.event.filter.ContractEventFilter;
 import net.consensys.eventeum.dto.event.filter.ContractEventSpecification;
 import net.consensys.eventeum.dto.event.filter.ParameterDefinition;
 import net.consensys.eventeum.dto.event.parameter.EventParameter;
+import net.consensys.eventeum.dto.event.parameter.NumberParameter;
+import net.consensys.eventeum.dto.event.parameter.StringParameter;
 import org.web3j.abi.FunctionReturnDecoder;
 import org.web3j.abi.Utils;
 import org.web3j.abi.datatypes.Type;
@@ -17,6 +18,7 @@ import org.web3j.crypto.Keys;
 import org.web3j.protocol.core.methods.response.Log;
 
 import java.math.BigInteger;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -28,8 +30,8 @@ public class DefaultContractEventDetailsFactory implements ContractEventDetailsF
     private String networkName;
 
     public DefaultContractEventDetailsFactory(EventParameterConverter<Type> parameterConverter,
-                                       EventConfirmationConfig eventConfirmationConfig,
-                                       String networkName) {
+                                              EventConfirmationConfig eventConfirmationConfig,
+                                              String networkName) {
         this.parameterConverter = parameterConverter;
         this.eventConfirmationConfig = eventConfirmationConfig;
         this.networkName = networkName;
@@ -42,6 +44,8 @@ public class DefaultContractEventDetailsFactory implements ContractEventDetailsF
         final List<EventParameter> nonIndexed = typeListToParameterList(getNonIndexedParametersFromLog(eventSpec, log));
         final List<EventParameter> indexed = typeListToParameterList(getIndexedParametersFromLog(eventSpec, log));
 
+        addNameToParameter(eventSpec.getIndexedParameterDefinitions(), indexed);
+        addNameToParameter(eventSpec.getNonIndexedParameterDefinitions(), nonIndexed);
         final ContractEventDetails eventDetails = new ContractEventDetails();
         eventDetails.setName(eventSpec.getEventName());
         eventDetails.setFilterId(eventFilter.getId());
@@ -66,6 +70,17 @@ public class DefaultContractEventDetailsFactory implements ContractEventDetailsF
         }
 
         return eventDetails;
+    }
+
+    private void addNameToParameter(List<ParameterDefinition> a, List<EventParameter> l) {
+        for (int i = 0; i < l.size(); i++) {
+            if (l.get(i).getClass() == NumberParameter.class) {
+                l.set(i, new NumberParameter(l.get(i).getType(), (BigInteger) l.get(i).getValue(), a.get(i).getName()));
+            } else {
+                l.set(i, new StringParameter(l.get(i).getType(), l.get(i).getValueString(), a.get(i).getName()));
+
+            }
+        }
     }
 
     private List<EventParameter> typeListToParameterList(List<Type> typeList) {
